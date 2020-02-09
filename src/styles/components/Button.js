@@ -40,9 +40,9 @@ const colors = {
   `,
 };
 
-const Button = styled.button.attrs({
-  type: 'button',
-})`
+const Button = styled.button.attrs(props => ({
+  type: props.type || 'button',
+}))`
   border-radius: 3px;
   transition: background-color 0.15s ease;
   background: #7289da;
@@ -53,11 +53,12 @@ const Button = styled.button.attrs({
   text-transform: uppercase;
   font-weight: 700;
 
-  ${(props) => sizes[props.size] || 'default'};
-  ${(props) => colors[props.color] || 'default'}
+  ${props => sizes[props.size] || 'default'};
+  ${props => colors[props.color] || 'default'}
 
-  ${(props) => props.filled === false
-    && css`
+  ${props =>
+    props.filled === false &&
+    css`
       background: none;
 
       &:hover {
