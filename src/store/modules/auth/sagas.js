@@ -6,6 +6,10 @@ import history from '~/services/history';
 
 import { signInSuccess, signFailure } from './actions';
 
+export function setToken(token) {
+  if (token) api.defaults.headers.Authorization = `Bearer ${token}`;
+}
+
 export function* signIn({ payload }) {
   try {
     const { email, password } = payload;
@@ -17,11 +21,10 @@ export function* signIn({ payload }) {
 
     const { token } = response.data;
 
-    api.defaults.headers.Authorization = `Bearer ${token}`;
+    setToken(token);
 
     yield put(signInSuccess(token));
 
-    console.tron.log('foi');
     history.push('/');
   } catch (err) {
     err.response.data.map(field => toast.error(field.message));
@@ -33,16 +36,14 @@ export function signOut() {
   history.push('/signin');
 }
 
-export function setToken({ payload }) {
-  if (payload) {
-    const { token } = payload.auth;
-
-    if (token) api.defaults.headers.Authorization = `Bearer ${token}`;
-  }
-}
-
 export default all([
-  takeLatest('persist/REHYDRATE', setToken),
+  takeLatest('persist/REHYDRATE', ({ payload }) => {
+    if (payload) {
+      const { token } = payload.auth;
+
+      setToken(token);
+    }
+  }),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);
