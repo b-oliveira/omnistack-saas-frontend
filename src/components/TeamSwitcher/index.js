@@ -5,10 +5,11 @@ import { toast } from 'react-toastify';
 import api from '~/services/api';
 
 import { setCurrentTeam } from '~/store/modules/team/actions';
+import { signOut } from '~/store/modules/auth/actions';
 
 import NewTeam from './NewTeam';
 
-import { Container, TeamList, Team, New } from './styles';
+import { Container, TeamList, Team, New, Logout } from './styles';
 
 export default function TeamSwitcher() {
   const [teams, setTeams] = useState([]);
@@ -34,6 +35,10 @@ export default function TeamSwitcher() {
     dispatch(setCurrentTeam(team));
   }
 
+  function handleSignOut() {
+    dispatch(signOut());
+  }
+
   function handleCloseModal(team) {
     if (team) setTeams([...teams, team]);
 
@@ -43,6 +48,7 @@ export default function TeamSwitcher() {
   return (
     <Container>
       <TeamList>
+        <New onClick={() => setNewTeam(true)}>NOVO</New>
         {teams.map(team => (
           <Team key={team.id} onClick={() => handleCurrentTeam(team)}>
             <img
@@ -51,11 +57,10 @@ export default function TeamSwitcher() {
             />
           </Team>
         ))}
-
-        <New onClick={() => setNewTeam(true)}>NOVO</New>
-
-        {newTeam && <NewTeam close={handleCloseModal} />}
+        <Logout onClick={() => handleSignOut()}>SAIR</Logout>
       </TeamList>
+
+      {newTeam && <NewTeam close={handleCloseModal} />}
     </Container>
   );
 }

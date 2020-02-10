@@ -11,6 +11,10 @@ export default function team(state = INITIAL_STATE, action) {
         draft.currentTeam = action.payload.currentTeam;
         break;
       }
+      case '@auth/SIGN_OUT': {
+        draft.currentTeam = null;
+        break;
+      }
       default:
     }
   });
