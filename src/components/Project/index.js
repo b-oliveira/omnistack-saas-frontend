@@ -4,12 +4,15 @@ import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 
-import Button from '~/styles/components/Button';
+import NewProject from './NewProject';
 
+import Button from '~/styles/components/Button';
 import { Container, ProjectItem } from './styles';
 
 export default function Project() {
   const [projects, setProjects] = useState([]);
+  const [newProject, setNewProject] = useState(false);
+
   const { currentTeam } = useSelector(state => state.team);
 
   useEffect(() => {
@@ -26,13 +29,19 @@ export default function Project() {
     loadProjects();
   }, [currentTeam]);
 
+  function handleCloseModal(project) {
+    if (project) setProjects([...projects, project]);
+
+    setNewProject(false);
+  }
+
   return (
     currentTeam && (
       <Container>
         <header>
           <h1>{currentTeam.name}</h1>
           <div>
-            <Button onClick={() => {}}>+ Novo</Button>
+            <Button onClick={() => setNewProject(true)}>+ Novo</Button>
             <Button onClick={() => {}}>Membros</Button>
           </div>
         </header>
@@ -41,6 +50,8 @@ export default function Project() {
             <p>{project.title}</p>
           </ProjectItem>
         ))}
+
+        {newProject && <NewProject close={handleCloseModal} />}
       </Container>
     )
   );

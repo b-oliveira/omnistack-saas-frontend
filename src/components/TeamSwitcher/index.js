@@ -49,6 +49,7 @@ export default function TeamSwitcher() {
     <Container>
       <TeamList>
         <New onClick={() => setNewTeam(true)}>NOVO</New>
+
         {teams.map(team => (
           <Team key={team.id} onClick={() => handleCurrentTeam(team)}>
             <img
@@ -57,8 +58,9 @@ export default function TeamSwitcher() {
             />
           </Team>
         ))}
-        <Logout onClick={() => handleSignOut()}>SAIR</Logout>
       </TeamList>
+
+      <Logout onClick={() => handleSignOut()}>SAIR</Logout>
 
       {newTeam && <NewTeam close={handleCloseModal} />}
     </Container>
