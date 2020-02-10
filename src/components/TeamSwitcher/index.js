@@ -6,10 +6,13 @@ import api from '~/services/api';
 
 import { setCurrentTeam } from '~/store/modules/team/actions';
 
-import { Container, TeamList, Team } from './styles';
+import NewTeam from './NewTeam';
+
+import { Container, TeamList, Team, New } from './styles';
 
 export default function TeamSwitcher() {
   const [teams, setTeams] = useState([]);
+  const [newTeam, setNewTeam] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -31,6 +34,12 @@ export default function TeamSwitcher() {
     dispatch(setCurrentTeam(team));
   }
 
+  function handleCloseModal(team) {
+    if (team) setTeams([...teams, team]);
+
+    setNewTeam(false);
+  }
+
   return (
     <Container>
       <TeamList>
@@ -42,6 +51,10 @@ export default function TeamSwitcher() {
             />
           </Team>
         ))}
+
+        <New onClick={() => setNewTeam(true)}>NOVO</New>
+
+        {newTeam && <NewTeam close={handleCloseModal} />}
       </TeamList>
     </Container>
   );
