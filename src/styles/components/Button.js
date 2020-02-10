@@ -53,8 +53,8 @@ const Button = styled.button.attrs(props => ({
   text-transform: uppercase;
   font-weight: 700;
 
-  ${props => sizes[props.size] || 'default'};
-  ${props => colors[props.color] || 'default'}
+  ${props => sizes[props.size] || sizes.default};
+  ${props => colors[props.color] || colors.default}
 
   ${props =>
     props.filled === false &&
