@@ -6,12 +6,15 @@ import api from '~/services/api';
 
 import NewProject from './NewProject';
 
+import Member from '~/components/Member';
+
 import Button from '~/styles/components/Button';
 import { Container, ProjectItem } from './styles';
 
 export default function Project() {
   const [projects, setProjects] = useState([]);
   const [newProject, setNewProject] = useState(false);
+  const [newMember, setNewMember] = useState(false);
 
   const { currentTeam } = useSelector(state => state.team);
 
@@ -29,10 +32,14 @@ export default function Project() {
     loadProjects();
   }, [currentTeam]);
 
-  function handleCloseModal(project) {
+  function handleCloseModalProject(project) {
     if (project) setProjects([...projects, project]);
 
     setNewProject(false);
+  }
+
+  function handleCloseModalMember() {
+    setNewMember(false);
   }
 
   return (
@@ -42,7 +49,7 @@ export default function Project() {
           <h1>{currentTeam.name}</h1>
           <div>
             <Button onClick={() => setNewProject(true)}>+ Novo</Button>
-            <Button onClick={() => {}}>Membros</Button>
+            <Button onClick={() => setNewMember(true)}>Membros</Button>
           </div>
         </header>
         {projects.map(project => (
@@ -51,7 +58,9 @@ export default function Project() {
           </ProjectItem>
         ))}
 
-        {newProject && <NewProject close={handleCloseModal} />}
+        {newProject && <NewProject close={handleCloseModalProject} />}
+
+        {newMember && <Member close={handleCloseModalMember} />}
       </Container>
     )
   );
