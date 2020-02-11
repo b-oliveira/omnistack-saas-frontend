@@ -5,6 +5,8 @@ import Select from 'react-select';
 
 import api from '~/services/api';
 
+import Invite from './Invite';
+
 import Button from '~/styles/components/Button';
 import Modal from '~/components/Modal';
 import { List } from './styles';
@@ -58,6 +60,9 @@ export default function Member({ close }) {
   return (
     <Modal size="big">
       <h1>Membros</h1>
+
+      <Invite />
+
       <form>
         <List>
           {members.map(member => (
