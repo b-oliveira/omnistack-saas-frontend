@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
 
 import api from '~/services/api';
 
@@ -10,20 +11,49 @@ import { List } from './styles';
 
 export default function Member({ close }) {
   const [members, setMembers] = useState([]);
+  const [roles, setRoles] = useState([]);
+
+  async function handleLoadMembers() {
+    try {
+      const response = await api.get('members');
+
+      setMembers(response.data);
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }
 
   useEffect(() => {
-    async function loadMembers() {
-      try {
-        const response = await api.get('members');
+    handleLoadMembers();
+  }, []);
 
-        setMembers(response.data);
+  useEffect(() => {
+    async function loadRoles() {
+      try {
+        const response = await api.get('roles');
+
+        setRoles(response.data);
       } catch (err) {
         toast.error(err.message);
       }
     }
 
-    loadMembers();
+    loadRoles();
   }, []);
+
+  async function handleRolesChange(member, values) {
+    try {
+      await api.put(`members/${member.id}`, {
+        roles: values.map(role => role.id),
+      });
+
+      handleLoadMembers();
+
+      toast.success('Permissões atualizadas com sucesso!');
+    } catch (err) {
+      toast.error(err.message);
+    }
+  }
 
   return (
     <Modal size="big">
@@ -33,6 +63,14 @@ export default function Member({ close }) {
           {members.map(member => (
             <li key={member.id}>
               <strong>{member.user.name}</strong>
+              <Select
+                isMulti
+                options={roles}
+                value={member.roles}
+                getOptionLabel={role => role.name}
+                getOptionValue={role => role.id}
+                onChange={values => handleRolesChange(member, values)}
+              />
             </li>
           ))}
         </List>
