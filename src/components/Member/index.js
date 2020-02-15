@@ -46,7 +46,7 @@ export default function Member({ close }) {
   async function handleRolesChange(member, values) {
     try {
       await api.put(`members/${member.id}`, {
-        roles: values.map(role => role.id),
+        roles: values ? values.map(role => role.id) : [],
       });
 
       handleLoadMembers();

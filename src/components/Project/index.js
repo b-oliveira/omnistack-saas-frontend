@@ -21,9 +21,11 @@ export default function Project() {
   useEffect(() => {
     async function loadProjects() {
       try {
-        const response = await api.get('projects');
+        if (currentTeam) {
+          const response = await api.get('projects');
 
-        setProjects(response.data);
+          setProjects(response.data);
+        }
       } catch (err) {
         toast.error(err.message);
       }

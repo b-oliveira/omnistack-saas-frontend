@@ -32,6 +32,29 @@ export function* signIn({ payload }) {
   }
 }
 
+export function* signUp({ payload }) {
+  try {
+    const { name, email, password } = payload;
+
+    const response = yield call(api.post, 'users', {
+      name,
+      email,
+      password,
+    });
+
+    const { token } = response.data;
+
+    setToken(token);
+
+    yield put(signInSuccess(token));
+
+    history.push('/');
+  } catch (err) {
+    err.response.data.map(field => toast.error(field.message));
+    yield put(signFailure());
+  }
+}
+
 export function signOut() {
   history.push('/signin');
 }
@@ -45,5 +68,6 @@ export default all([
     }
   }),
   takeLatest('@auth/SIGN_IN_REQUEST', signIn),
+  takeLatest('@auth/SIGN_UP_REQUEST', signUp),
   takeLatest('@auth/SIGN_OUT', signOut),
 ]);
