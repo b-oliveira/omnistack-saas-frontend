@@ -6,6 +6,7 @@ import api from '~/services/api';
 
 import NewProject from './NewProject';
 
+import Can from '~/components/Can';
 import Member from '~/components/Member';
 
 import Button from '~/styles/components/Button';
@@ -50,7 +51,9 @@ export default function Project() {
         <header>
           <h1>{currentTeam.name}</h1>
           <div>
-            <Button onClick={() => setNewProject(true)}>+ Novo</Button>
+            <Can permission="projects_create">
+              <Button onClick={() => setNewProject(true)}>+ Novo</Button>
+            </Can>
             <Button onClick={() => setNewMember(true)}>Membros</Button>
           </div>
         </header>

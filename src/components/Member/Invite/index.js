@@ -3,6 +3,8 @@ import { toast } from 'react-toastify';
 
 import api from '~/services/api';
 
+import Can from '~/components/Can';
+
 import Button from '~/styles/components/Button';
 import { Container } from './styles';
 
@@ -32,14 +34,16 @@ export default function Invite() {
   }
 
   return (
-    <Container onSubmit={e => handleSubmit(e)}>
-      <input
-        type="email"
-        name="email"
-        placeholder="Convidar para o time"
-        onChange={e => handleChange(e)}
-      />
-      <Button type="submit">Enviar</Button>
-    </Container>
+    <Can permission="invites_create">
+      <Container onSubmit={e => handleSubmit(e)}>
+        <input
+          type="email"
+          name="email"
+          placeholder="Convidar para o time"
+          onChange={e => handleChange(e)}
+        />
+        <Button type="submit">Enviar</Button>
+      </Container>
+    </Can>
   );
 }

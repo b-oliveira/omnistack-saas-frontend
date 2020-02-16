@@ -6,3 +6,13 @@ export function setCurrentTeam(currentTeam) {
     },
   };
 }
+
+export function setAccessRules(roles, permissions) {
+  return {
+    type: '@team/SET_ACCESS_RULES',
+    payload: {
+      roles,
+      permissions,
+    },
+  };
+}

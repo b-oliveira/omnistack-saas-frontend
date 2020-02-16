@@ -7,8 +7,10 @@ import api from '~/services/api';
 
 import Invite from './Invite';
 
-import Button from '~/styles/components/Button';
+import Can from '~/components/Can';
 import Modal from '~/components/Modal';
+
+import Button from '~/styles/components/Button';
 import { List } from './styles';
 
 export default function Member({ close }) {
@@ -68,14 +70,19 @@ export default function Member({ close }) {
           {members.map(member => (
             <li key={member.id}>
               <strong>{member.user.name}</strong>
-              <Select
-                isMulti
-                options={roles}
-                value={member.roles}
-                getOptionLabel={role => role.name}
-                getOptionValue={role => role.id}
-                onChange={values => handleRolesChange(member, values)}
-              />
+              <Can role="administrator">
+                {can => (
+                  <Select
+                    isDisabled={!can}
+                    isMulti
+                    options={roles}
+                    value={member.roles}
+                    getOptionLabel={role => role.name}
+                    getOptionValue={role => role.id}
+                    onChange={values => handleRolesChange(member, values)}
+                  />
+                )}
+              </Can>
             </li>
           ))}
         </List>
